@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include('rest_framework.urls')),  # Browsable API 로그인 기능 추가
     path('api/', include('users.urls')),
 ]
