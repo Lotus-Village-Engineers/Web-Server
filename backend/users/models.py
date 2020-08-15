@@ -74,3 +74,39 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+class BusinessOwner(models.Model):
+    """ 사업주 유저의 프로필 정보 """
+    user = models.OneToOneField(CustomUser,
+                                on_delete=models.CASCADE,
+                                related_name='business_owner',
+                                null=True)
+    introduction = models.TextField(verbose_name='소개글',
+                                    help_text='사업주 자신에 대한 간략한 설명')
+
+    class Meta:
+        verbose_name = '사업주'
+        verbose_name_plural = '사업주'
+
+    def __str__(self):
+        return self.user.name
+
+
+class Customer(models.Model):
+    """ 소비자 유저의 프로필 정보 """
+    user = models.OneToOneField(CustomUser,
+                                on_delete=models.CASCADE,
+                                related_name='customer',
+                                null=True)
+    nickname = models.CharField(max_length=20,
+                                verbose_name='별명',
+                                help_text='다른 사람들에게 보여질 이름')
+    # balance = models.PositiveBigIntegerField(verbose_name='선결제 금액')
+
+    class Meta:
+        verbose_name = '소비자'
+        verbose_name_plural = '소비자'
+
+    def __str__(self):
+        return self.user.name
