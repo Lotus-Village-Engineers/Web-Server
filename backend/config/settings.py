@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import datetime
+import datetime, os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -67,7 +67,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # 템플릿 파일의 위치 설정
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,6 +134,7 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+# REST Framework 인증방식 관련 설정
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',    # 일반 사용자 인증방식
@@ -141,8 +142,18 @@ REST_FRAMEWORK = {
     )
 }
 
+# SIMPLE-JWT 토큰 관련 설정
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=10),    # 만료시간 10분
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),       # 만료시간 24시간
     'USER_ID_CLAIM': 'id',
 }
+
+# 이메일 전송 관련 설정
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"               # 이메일 전송 호스트 설정
+EMAIL_HOST_USER = 'lotuskyuree@gmail.com'   # 이메일 발송 이메일 계정
+EMAIL_HOST_PASSWORD = 'lotus1128!'          # 이메일 발송 이메일 계정의 비밀번호
+EMAIL_PORT = 587        # 구글 SMTP 포트번호
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

@@ -12,6 +12,7 @@ class UserAdmin(BaseUserAdmin):
         'birthday',
         'phone_number',
         'date_joined',
+        'is_active',
     ]
     # 어드민 페이지에서 유저모델 수정시 보여줄 필드를 지정한다.
     fieldsets = (

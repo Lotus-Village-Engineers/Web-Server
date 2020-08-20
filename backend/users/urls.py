@@ -15,4 +15,5 @@ urlpatterns = [
     path('users/me', views.CustomUserManageApiView.as_view(), name='manage'),
     path('users/token', TokenObtainPairView.as_view(), name='login'),
     path('users/refresh', TokenRefreshView.as_view(), name='token-refresh'),
+    path('users/activate/<str:uidb64>/<str:token>/', views.UserActivate.as_view(), name='activate'),
 ]
