@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+# from stores.models import Store, Prepayment
+
 
 class CustomUserManager(BaseUserManager):
     """ 베이스 유저 모델 관리와 관련된 클래스 """
@@ -85,12 +87,21 @@ class BusinessOwner(models.Model):
     introduction = models.TextField(verbose_name='소개글',
                                     help_text='사업주 자신에 대한 간략한 설명')
 
+    # BankAccount
+
     class Meta:
         verbose_name = '사업주'
         verbose_name_plural = '사업주'
 
     def __str__(self):
         return self.user.name
+
+
+class Store(models.Model):
+    """ 가맹점 정보 모델 """
+    owner = models.ForeignKey(BusinessOwner,
+                              on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
 
 
 class Customer(models.Model):
@@ -102,7 +113,6 @@ class Customer(models.Model):
     nickname = models.CharField(max_length=20,
                                 verbose_name='별명',
                                 help_text='다른 사람들에게 보여질 이름')
-    # balance = models.PositiveBigIntegerField(verbose_name='선결제 금액')
 
     class Meta:
         verbose_name = '소비자'
@@ -110,3 +120,28 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.user.name
+
+
+class Prepayment(models.Model):
+    """ 가맹점, 소비자 간 선결제 모델 """
+    store = models.ForeignKey(Store,
+                              on_delete=models.CASCADE)
+
+    customer = models.ForeignKey(Customer,
+                              on_delete=models.CASCADE,
+                              null=True)
+
+    balance = models.PositiveBigIntegerField()
+
+
+class TransactionHistory(models.Model):
+    customer = models.ForeignKey(Customer,
+                              on_delete=models.CASCADE)
+    store = models.ForeignKey(Store,
+                              on_delete=models.CASCADE,
+                              null=True)
+    prepayment = models.ForeignKey(Prepayment,
+                            on_delete=models.CASCADE,
+                            null=True)
+
+    amount = models.IntegerField()
